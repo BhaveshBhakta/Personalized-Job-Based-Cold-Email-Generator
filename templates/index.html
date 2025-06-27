@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cold Email Generator</title>
+</head>
+<body>
+    <h2>📧 Cold Email Generator</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <label>🔗 Job Posting URL:</label><br>
+        <input type="text" name="job_url" required style="width: 400px;"><br><br>
+
+        <label>📎 Upload Resume (PDF or DOCX):</label><br>
+        <input type="file" name="resume_file" accept=".pdf,.docx" required><br><br>
+
+        <button type="submit">Generate Email</button>
+    </form>
+
+    <br><hr><br>
+
+    {% if result %}
+        <h3>📬 Generated Cold Email:</h3>
+        <pre>{{ result }}</pre>
+    {% elif error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+</body>
+</html>
