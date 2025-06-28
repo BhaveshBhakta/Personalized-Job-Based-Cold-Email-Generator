@@ -7,12 +7,12 @@ from langchain_core.exceptions import OutputParserException
 class ColdEmailGenerator:
     def __init__(self):
         self.llm = ChatGroq(
-            temperature=0.2,
-            groq_api_key=os.getenv("GROQ_API_KEY"),
-            model_name="llama-3.3-70b-versatile"  # ✅ Correct model name
+            temperature=0.2, # Adjuste temperature for creativity
+            groq_api_key=os.getenv("GROQ_API_KEY"), # Retrive API key from environment variable
+            model_name="llama-3.3-70b-versatile"  # Select the appropriate model
         )
 
-    def extract_jobs(self, page_data):
+    def extract_jobs(self, page_data): # Prompt to extract job details
         prompt = PromptTemplate.from_template(
             """
             ### SCRAPED TEXT FROM WEBSITE:
@@ -24,14 +24,14 @@ class ColdEmailGenerator:
             ### JSON OUTPUT:
             """
         )
-        chain = prompt | self.llm
+        chain = prompt | self.llm # Chaining the prompt with the LLM
         res = chain.invoke({"page_data": page_data})
         try:
             return JsonOutputParser().parse(res.content)
         except OutputParserException:
             raise OutputParserException("Unable to parse job details")
 
-    def generate_email(self, job_info, resume_text):
+    def generate_email(self, job_info, resume_text): # Prompt to generate cold email
         prompt = PromptTemplate.from_template(
             """
             ### JOB DESCRIPTION:
@@ -46,7 +46,7 @@ class ColdEmailGenerator:
             ### EMAIL:
             """
         )
-        chain = prompt | self.llm
+        chain = prompt | self.llm # chaining the prompt with the LLM
         res = chain.invoke({
             "job_description": str(job_info),
             "resume_text": resume_text

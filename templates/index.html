@@ -1,27 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Cold Email Generator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job-Based Cold Email Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+    </style>
 </head>
 <body>
-    <h2>📧 Cold Email Generator</h2>
-    <form method="POST" enctype="multipart/form-data">
-        <label>🔗 Job Posting URL:</label><br>
-        <input type="text" name="job_url" required style="width: 400px;"><br><br>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>Personalized Job-Based Cold Email Generator</h1>
+                </div>
+                <p class="subtitle">Create personalized job application emails that stand out</p>
+            </div>
+        </header>
 
-        <label>📎 Upload Resume (PDF or DOCX):</label><br>
-        <input type="file" name="resume_file" accept=".pdf,.docx" required><br><br>
+        <main class="main-content">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2><i class="fas fa-magic"></i> Generate Your Perfect Email</h2>
+                    <p>Upload your resume and job posting URL to create a tailored cold email</p>
+                </div>
 
-        <button type="submit">Generate Email</button>
-    </form>
+                <form method="POST" enctype="multipart/form-data" class="email-form" id="emailForm">
+                    <div class="input-group">
+                        <label for="job_url" class="input-label">
+                            <i class="fas fa-link"></i>
+                            Job Posting URL
+                        </label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="url" 
+                                id="job_url"
+                                name="job_url" 
+                                required 
+                                placeholder="https://example.com/job-posting"
+                                class="form-input"
+                            >
+                            <div class="input-icon">
+                                <i class="fas fa-external-link-alt"></i>
+                            </div>
+                        </div>
+                    </div>
 
-    <br><hr><br>
+                    <div class="input-group">
+                        <label for="resume_file" class="input-label">
+                            <i class="fas fa-file-upload"></i>
+                            Upload Resume
+                        </label>
+                        <div class="file-upload-wrapper">
+                            <input 
+                                type="file" 
+                                id="resume_file"
+                                name="resume_file" 
+                                accept=".pdf,.docx" 
+                                required
+                                class="file-input"
+                            >
+                            <div class="file-upload-area" id="fileUploadArea">
+                                <div class="file-upload-content">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p class="upload-text">Click to upload or drag and drop</p>
+                                    <p class="upload-subtext">PDF or DOCX files only</p>
+                                </div>
+                            </div>
+                            <div class="file-info" id="fileInfo"></div>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span class="btn-text">
+                            <i class="fas fa-paper-plane"></i>
+                            Generate Cold Email
+                        </span>
+                        <div class="loading-spinner" id="loadingSpinner">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            Generating...
+                        </div>
+                    </button>
+                </form>
 
-    {% if result %}
-        <h3>📬 Generated Cold Email:</h3>
-        <pre>{{ result }}</pre>
-    {% elif error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
+            <div class="results-container" id="resultsContainer">
+                {% if result %}
+                <div class="result-success">
+                    <div class="result-header">
+                        <h3><i class="fas fa-check-circle"></i> Generated Cold Email</h3>
+                        <div class="result-actions">
+                            <button class="action-btn copy-btn" onclick="copyToClipboard()">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                            <button class="action-btn download-btn" onclick="downloadEmail()">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+                    <div class="email-preview" id="emailContent">
+                        <pre>{{ result }}</pre>
+                    </div>
+                </div>
+                {% elif error %}
+                <div class="result-error">
+                    <div class="error-content">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Oops! Something went wrong</h3>
+                        <p>{{ error }}</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 Cold Email Generator. Crafted with <i class="fas fa-heart"></i> for job seekers</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

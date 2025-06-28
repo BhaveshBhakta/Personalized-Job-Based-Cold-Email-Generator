@@ -3,12 +3,16 @@ from PyPDF2 import PdfReader
 from bs4 import BeautifulSoup
 from docx import Document
 
+# Function for cleaning page content
+
 def clean_text(text: str) -> str:
     text = re.sub(r'\n\s*\n+', '\n\n', text)
     return '\n'.join(line.strip() for line in text.strip().splitlines())
 
 def strip_html(html_content: str) -> str:
     return BeautifulSoup(html_content, "html.parser").get_text()
+
+# Function to load and clean resume from PDF
 
 def load_resume(file_path: str) -> str:
     if file_path.endswith(".pdf"):

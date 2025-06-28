@@ -22,27 +22,27 @@ def index():
             error = "Please provide both the job URL and resume."
         else:
             try:
-                # Save resume temporarily
+                # Saving resume temporarily
                 temp_path = f"temp_{resume_file.filename}"
                 resume_file.save(temp_path)
 
-                # Load and clean job posting
+                # Loading and cleaning job posting
                 loader = WebBaseLoader(job_url)
                 page = loader.load().pop().page_content
                 cleaned_job = clean_text(strip_html(page))
 
-                # Extract job info
+                # Extracing job info
                 job_info = email_gen.extract_jobs(cleaned_job)
                 job_info = job_info if isinstance(job_info, list) else [job_info]
 
                 # Read resume
                 resume_raw = load_resume(temp_path)
 
-                # Generate email
+                # Generating email
                 cold_email = email_gen.generate_email(job_info[0], resume_raw)
                 result = cold_email
 
-                os.remove(temp_path)  # Clean up
+                os.remove(temp_path) 
 
             except Exception as e:
                 error = f"Error: {str(e)}"
